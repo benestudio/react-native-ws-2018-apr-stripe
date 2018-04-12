@@ -1,13 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import CardInput from './components/CardInput';
 
 export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+        <Text>Welcome at Bene Studio's</Text>
+        <Text>Payment in React Native Workshop!</Text>
+        <CardInput />
       </View>
     );
   }
