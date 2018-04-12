@@ -36,9 +36,26 @@ export default class CardInput extends Component {
     });
   }
 
+  handlePayPress = () => {
+    const { onCardChanged } = this.props;
+    // equivalent syntax:
+    /*
+    const onCardChanged = this.props.onCardChanged;
+    */
+
+    const card = this.state;
+    onCardChanged && onCardChanged(card);
+    /*
+    // equivalent syntax:
+    if (onCardChanged) {
+      onCardChanged(card);
+    }
+    */
+  }
+
   render() {
     return (
-      <View>
+      <View style={styles.outermost}>
         <View style={styles.container}>
           <TextInput
             placeholderTextColor="rgba(0,0,0,.7)"
@@ -65,7 +82,10 @@ export default class CardInput extends Component {
             onChangeText={this.handleCvcChange}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.handlePayPress}
+        >
           <Text>Pay!</Text>
         </TouchableOpacity>
       </View>
@@ -74,9 +94,19 @@ export default class CardInput extends Component {
 }
 
 const styles = StyleSheet.create({
+  outermost: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
+  },
+  button: {
+    backgroundColor: 'rgb(66, 134, 244)',
+    padding: 10,
+    borderRadius: 10,
+  },
   container: {
     flexDirection: 'row',
-    margin: 18,
+    marginTop: 10,
+    marginBottom: 10,
     padding: 10,
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.3)',
