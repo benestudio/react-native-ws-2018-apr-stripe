@@ -1,30 +1,73 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default class CardInput extends Component {
+  constructor() {
+    super();
+    this.state = {
+      number: '',
+      mm: '',
+      yy: '',
+      cvc: '',
+    };
+  }
+
+  handleNumberChange = newNumber => {
+    this.setState({
+      number: newNumber,
+    });
+  }
+
+  handleMmChange = newMm => {
+    this.setState({
+      mm: newMm,
+    });
+  }
+
+  handleYyChange = newYy => {
+    this.setState({
+      yy: newYy,
+    });
+  }
+
+  handleCvcChange = newCvc => {
+    this.setState({
+      cvc: newCvc,
+    });
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <TextInput
-          placeholderTextColor="rgba(0,0,0,.7)"
-          placeholder="Card number"
-          style={[styles.input, styles.number]}
-        />
-        <TextInput
-          placeholderTextColor="rgba(0,0,0,.7)"
-          placeholder="MM"
-          style={[styles.input, styles.mm]}
-        />
-        <TextInput
-          placeholderTextColor="rgba(0,0,0,.7)"
-          placeholder="YY"
-          style={[styles.input, styles.yy]}
-        />
-        <TextInput
-          placeholderTextColor="rgba(0,0,0,.7)"
-          placeholder="CVC"
-          style={[styles.input, styles.cvc]}          
-        />
+      <View>
+        <View style={styles.container}>
+          <TextInput
+            placeholderTextColor="rgba(0,0,0,.7)"
+            placeholder="Card number"
+            style={[styles.input, styles.number]}
+            onChangeText={this.handleNumberChange}
+          />
+          <TextInput
+            placeholderTextColor="rgba(0,0,0,.7)"
+            placeholder="MM"
+            style={[styles.input, styles.mm]}
+            onChangeText={this.handleMmChange}
+          />
+          <TextInput
+            placeholderTextColor="rgba(0,0,0,.7)"
+            placeholder="YY"
+            style={[styles.input, styles.yy]}
+            onChangeText={this.handleYyChange}
+          />
+          <TextInput
+            placeholderTextColor="rgba(0,0,0,.7)"
+            placeholder="CVC"
+            style={[styles.input, styles.cvc]}          
+            onChangeText={this.handleCvcChange}
+          />
+        </View>
+        <TouchableOpacity>
+          <Text>Pay!</Text>
+        </TouchableOpacity>
       </View>
     );
   }
