@@ -1,59 +1,53 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { Text, View } from 'react-native';
+import styled from 'styled-components';
+
 import CardInput from './components/CardInput';
 import StripeClient from './StripeClient';
+const STRIPE_TEST_KEY = 'sk_test_7Jifm8AU6se8vBgdWcb5un6t';
+const stripe = new StripeClient(STRIPE_TEST_KEY);
 
-const testApiKey = 'sk_test_7Jifm8AU6se8vBgdWcb5un6t';
+const AppContainer = styled.View`
+  flex: 1;
+  background-color: #fff;
+  align-items: stretch;
+  justify-content: center;
+  padding: 10px;
+`;
+const WelcomeTextHolder = styled.View`
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+`;
 
 export default class App extends React.Component {
-  constructor() {
-    super();
-    this.stripe = new StripeClient(testApiKey);
-  }
-
-  handlePayPressed = async card => {
-    const token = await this.stripe.tokenizeCard({
-      number: card.number,
-      expMonth: card.mm,
-      expYear: card.yy,
-      cvc: card.cvc,
+  onPayPressed = async ({number, mm, yy, cvc}) => {
+    const token = await stripe.tokenizeCard({ number, expMonth: mm, expYear: yy, cvc });
+    const tokenId = token.id;
+    const customer = await stripe.createCustomer({
+      email: `test@test.com`,
+      source: tokenId
     });
-
-    const cardTokenId = token.id;
-
-    const customer = await this.stripe.createCustomer({
-      email: 'foo-customer@example.com',
-      source: cardTokenId,
+    const res = await stripe.chargeCustomer({
+      customer: customer.id,
+      amount: 1000,
+      currency: 'usd'
     });
     
-    const charge = await this.stripe.chargeCustomer({
-      customer: customer.id,
-      amount: 1000, // with two decimals
-      currency: 'usd',
-    });
-
-    Alert.alert(charge.id);
+    alert(JSON.stringify(customer));
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Welcome at Bene Studio's</Text>
-        <Text>Payment in React Native Workshop!</Text>
-        <CardInput
-          onCardChanged={this.handlePayPressed}
-        />
-      </View>
+      <AppContainer>
+        <WelcomeTextHolder>
+          <Text>React Native Demo</Text>
+          <Text>Stripe Integration</Text>
+        </WelcomeTextHolder>
+        
+        <CardInput onPayPressed={this.onPayPressed} />
+      </AppContainer>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    padding: 20,
-  },
-});
