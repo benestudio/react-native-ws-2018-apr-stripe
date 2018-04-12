@@ -1,134 +1,115 @@
-import React, { Component } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from "react";
+import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-export default class CardInput extends Component {
-  constructor() {
-    super();
-    this.state = {
-      number: '',
-      mm: '',
-      yy: '',
-      cvc: '',
-    };
-  }
+const MyTextInput = ({ ...props }) => (
+  <TextInput
+    placeholderTextColor="#CCF"
+    underlineColorAndroid="transparent"
+    {...props}
+  />
+);
 
-  handleNumberChange = newNumber => {
-    this.setState({
-      number: newNumber,
-    });
-  }
+const Container = styled.View`
+  border-radius: 5px;
+  background-color: #eef;
+  elevation: 3;
+`;
 
-  handleMmChange = newMm => {
-    this.setState({
-      mm: newMm,
-    });
-  }
+const Flex = styled.View`
+  flex: ${props => props.val};
+`;
 
-  handleYyChange = newYy => {
-    this.setState({
-      yy: newYy,
-    });
-  }
+const Row = styled.View`
+  flex-direction: row;
+  padding: 10px;
+`;
 
-  handleCvcChange = newCvc => {
-    this.setState({
-      cvc: newCvc,
-    });
-  }
+const CardDetailsContainer = styled(Row)`
+  margin: 10px;
+  border-width: 1px;
+  border-color: rgba(48, 48, 170, 0.2);
+  border-radius: 5px;
+`;
 
-  handlePayPress = () => {
-    const { onCardChanged } = this.props;
-    // equivalent syntax:
-    /*
-    const onCardChanged = this.props.onCardChanged;
-    */
+const InputField = styled(MyTextInput)`
+  font-size: 18;
+`;
 
-    const card = this.state;
-    onCardChanged && onCardChanged(card);
-    /*
-    // equivalent syntax:
-    if (onCardChanged) {
-      onCardChanged(card);
-    }
-    */
-  }
+const CardNumber = styled(InputField)`
+  flex: 1;
+`;
+
+const FixWidthInput = styled(InputField)`
+  width: ${props => props.width};
+`;
+
+const PayButton = styled.TouchableOpacity`
+  width: 120px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 3;
+  background-color: #33a;
+`;
+
+const PayText = styled.Text`
+  color: #eaeaea;
+`;
+
+export default class CardInput extends React.Component {
+  static propTypes = {
+    onPayPressed: PropTypes.func
+  };
+  static defaultProps = {
+    onPayPressed: state => alert("No handler defined!")
+  };
+
+  state = {
+    number: "",
+    mm: "",
+    yy: "",
+    cvc: ""
+  };
+
+  handleChange = ({ ...props }) => this.setState({ ...props });
 
   render() {
     return (
-      <View style={styles.outermost}>
-        <View style={styles.container}>
-          <TextInput
-            placeholderTextColor="rgba(0,0,0,.7)"
-            placeholder="Card number"
-            style={[styles.input, styles.number]}
-            onChangeText={this.handleNumberChange}
+      <Container>
+        <CardDetailsContainer>
+          <CardNumber
+            placeholder="CardNumber"
             keyboardType="numeric"
+            onChangeText={number => this.handleChange({ number })}
           />
-          <TextInput
-            placeholderTextColor="rgba(0,0,0,.7)"
+          <FixWidthInput
             placeholder="MM"
-            style={[styles.input, styles.mm]}
-            onChangeText={this.handleMmChange}
             keyboardType="numeric"
+            onChangeText={mm => this.handleChange({ mm })}
+            width="50"
           />
-          <TextInput
-            placeholderTextColor="rgba(0,0,0,.7)"
+          <FixWidthInput
             placeholder="YY"
-            style={[styles.input, styles.yy]}
-            onChangeText={this.handleYyChange}
             keyboardType="numeric"
+            onChangeText={yy => this.handleChange({ yy })}
+            width="50"
           />
-          <TextInput
-            placeholderTextColor="rgba(0,0,0,.7)"
+          <FixWidthInput
             placeholder="CVC"
-            style={[styles.input, styles.cvc]}          
-            onChangeText={this.handleCvcChange}
             keyboardType="numeric"
+            onChangeText={cvc => this.handleChange({ cvc })}
+            width="70"
           />
-        </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={this.handlePayPress}
-        >
-          <Text>Pay!</Text>
-        </TouchableOpacity>
-      </View>
+        </CardDetailsContainer>
+        <Row>
+          <Flex val="1" />
+          <PayButton onPress={() => this.props.onPayPressed(this.state)}>
+            <PayText>Pay!</PayText>
+          </PayButton>
+        </Row>
+      </Container>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  outermost: {
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
-  button: {
-    backgroundColor: 'rgb(66, 134, 244)',
-    padding: 10,
-    borderRadius: 10,
-  },
-  container: {
-    flexDirection: 'row',
-    marginTop: 10,
-    marginBottom: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 5,
-  },
-  input: {
-    fontSize: 20,
-  },
-  number: {
-    flex: 1,    
-  },
-  mm: {
-    width: 40,
-  },
-  yy: {
-    width: 40,    
-  },
-  cvc: {
-    width: 60,    
-  },
-});
