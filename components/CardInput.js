@@ -33,21 +33,25 @@ export default class CardInput extends Component {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    margin: 18,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+    borderRadius: 5,
   },
   input: {
-    fontSize: 18,
-    borderWidth: 1,
+    fontSize: 20,
   },
   number: {
     flex: 1,    
   },
   mm: {
-    width: 50,
+    width: 40,
   },
   yy: {
-    width: 50,    
+    width: 40,    
   },
   cvc: {
-    width: 70,    
+    width: 60,    
   },
 });
