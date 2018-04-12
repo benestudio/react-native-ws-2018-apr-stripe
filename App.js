@@ -11,8 +11,28 @@ export default class App extends React.Component {
     this.stripe = new StripeClient(testApiKey);
   }
 
-  handlePayPressed = card => {
-    Alert.alert(card.number)
+  handlePayPressed = async card => {
+    const token = await this.stripe.tokenizeCard({
+      number: card.number,
+      expMonth: card.mm,
+      expYear: card.yy,
+      cvc: card.cvc,
+    });
+
+    const cardTokenId = token.id;
+
+    const customer = await this.stripe.createCustomer({
+      email: 'foo-customer@example.com',
+      source: cardTokenId,
+    });
+    
+    const charge = await this.stripe.chargeCustomer({
+      customer: customer.id,
+      amount: 1000, // with two decimals
+      currency: 'usd',
+    });
+
+    Alert.alert(charge.id);
   }
 
   render() {
