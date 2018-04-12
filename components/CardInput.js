@@ -62,24 +62,28 @@ export default class CardInput extends Component {
             placeholder="Card number"
             style={[styles.input, styles.number]}
             onChangeText={this.handleNumberChange}
+            keyboardType="numeric"
           />
           <TextInput
             placeholderTextColor="rgba(0,0,0,.7)"
             placeholder="MM"
             style={[styles.input, styles.mm]}
             onChangeText={this.handleMmChange}
+            keyboardType="numeric"
           />
           <TextInput
             placeholderTextColor="rgba(0,0,0,.7)"
             placeholder="YY"
             style={[styles.input, styles.yy]}
             onChangeText={this.handleYyChange}
+            keyboardType="numeric"
           />
           <TextInput
             placeholderTextColor="rgba(0,0,0,.7)"
             placeholder="CVC"
             style={[styles.input, styles.cvc]}          
             onChangeText={this.handleCvcChange}
+            keyboardType="numeric"
           />
         </View>
         <TouchableOpacity
